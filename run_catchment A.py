@@ -63,23 +63,29 @@ ps = PredefinedSplit(test_fold)
 
 # Define hyperparameter search space
 param_space = {
-    'learning_rate': Real(0.05, 0.1),
-    'n_estimators': Integer(300, 1000),
-    'max_depth': Integer(3, 10),
-    'colsample_bytree': Real(0.5, 1.0)
-}
+        'learning_rate': Real(0.005, 0.1),
+        'n_estimators': Integer(100, 600),
+        'max_depth': Integer(2, 10),
+        'colsample_bytree': Real(0.5, 1.0),
+        'reg_alpha': Real(1e-4, 0.5, prior='log-uniform'),
+        'reg_lambda': Real(5, 10, prior='log-uniform'),
+        'subsample': Real(0.7, 1.0),
+        'min_child_weight': Integer(1, 10)
+    }
 
 # Run BayesSearchCV
 opt = BayesSearchCV(
-    estimator=xgb.XGBRegressor(objective='reg:squarederror', n_jobs=-1, random_state=42),
-    search_spaces=param_space,
-    n_iter=10,
-    scoring='neg_root_mean_squared_error',
-    cv=ps,
-    n_jobs=-1,
-    verbose=0,
-    random_state=42
-)
+        estimator=xgb.XGBRegressor(objective='reg:squarederror', n_jobs=-1, random_state=42,eval_metric='rmse'),
+        search_spaces=param_space,
+        n_iter=50,
+        scoring='neg_root_mean_squared_error',
+        cv=ps,
+        n_jobs=1,
+        verbose=0,
+        random_state=42,
+        refit=True,
+        return_train_score=True
+    )
 
 opt.fit(X_all, y_all)
 print("Best parameters:", opt.best_params_)
