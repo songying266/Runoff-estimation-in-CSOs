@@ -28,7 +28,6 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import KFold
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
-from skopt import BayesSearchCV
 from skopt.space import Real, Integer
 from math import sqrt
 from sklearn.model_selection import StratifiedKFold
@@ -95,7 +94,7 @@ final_model = opt.best_estimator_
 y_pred_test = final_model.predict(test_X)
 
 r2 = r2_score(test_y, y_pred_test)
-mare = np.mean(np.abs(test_y - y_pred_test) / (np.abs(test_y) + 1e-6))   # mean absolute relative error
+rmse = np.sqrt(np.mean((y_pred - y_true) ** 2) )
 re = (y_pred_test.sum() - test_y.sum()) / test_y.sum()
 pcc = np.corrcoef(test_y, y_pred_test)[0, 1]
 
