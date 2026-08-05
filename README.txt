@@ -1,4 +1,4 @@
-This package contains an example script and instructions to reproduce the machine learning and SHAP analysis for sub-catchment A.
+This package contains processed CML data for seven catchments and an example script to reproduce the results for sub-catchment A.
 
 Python script:
 
