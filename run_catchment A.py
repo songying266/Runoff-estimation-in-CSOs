@@ -10,7 +10,7 @@ This script demonstrates the full pipeline for Basin A:
 
 Assumptions about the CSVs:
 - Three files in ./data/:
-  Training_dataset_A.csv, Validation_dataset_A.csv, Testing_dataset_A.csv
+  catchment_A_test.csv, catchment_A_train.csv, catchment_A_validation.csv
 - Each file contains:
     - a target column (name can be configured; fallback: the penultimate column)
     - an 'event' column (used only for saving predictions grouped by event)
@@ -43,9 +43,9 @@ out_dir = "./outputs_A"    # folder for saving results
 os.makedirs(out_dir, exist_ok=True)
 
 # ------------------ Load datasets ------------------
-train = pd.read_csv(os.path.join(data_dir, "Training_dataset_A.csv"), index_col=0)
-vali  = pd.read_csv(os.path.join(data_dir, "Validation_dataset_A.csv"), index_col=0)
-test  = pd.read_csv(os.path.join(data_dir, "Testing_dataset_A.csv"), index_col=0)
+train = pd.read_csv(os.path.join(data_dir, "catchment_A_train.csv"), index_col=0)
+vali  = pd.read_csv(os.path.join(data_dir, "catchment_A_test.csv"), index_col=0)
+test  = pd.read_csv(os.path.join(data_dir, "catchment_A_validation.csv"), index_col=0)
 
 # ------------------ Split features and target ------------------
 train_X, train_y = train.iloc[:, 5:-2], train.iloc[:, -2]
@@ -97,8 +97,6 @@ r2 = r2_score(test_y, y_pred_test)
 rmse = np.sqrt(np.mean((y_pred - y_true) ** 2) )
 re = (y_pred_test.sum() - test_y.sum()) / test_y.sum()
 pcc = np.corrcoef(test_y, y_pred_test)[0, 1]
-
-print(f"R²={r2:.3f}, PCC={pcc:.3f}, MARE={mare:.3f}, RE={re:.3f}")
 
 # Save predictions
 df_pred = pd.DataFrame({
@@ -180,8 +178,8 @@ def compute_shap_importance(shap_matrix):
     feature_importance = np.abs(shap_matrix).mean(axis=0)
     In = np.zeros((num_CML, 1))
     for i in range(num_CML):
-        start_idx = i * 13  # note: change 13 if using different time steps
-        end_idx = (i + 1) * 13
+        start_idx = i * 21  
+        end_idx = (i + 1) * 21
         In[i] = np.sum(feature_importance[start_idx:end_idx])
     In = np.append(In, [feature_importance[-2], feature_importance[-1]])  # add sin and cos
     return In
