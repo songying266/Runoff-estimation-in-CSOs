@@ -33,7 +33,7 @@ shap_timecurve_group1.png – SHAP importance curve over time steps (example for
 
 shap_by_rain_intensity.png – SHAP importance under small / moderate / heavy rainfall conditions.
 
-Console output: best hyperparameters from BayesSearchCV, and test set metrics (R², PCC, MARE, RE).
+Console output: best hyperparameters from BayesSearchCV, and test set metrics (NSE, PCC, RMSE, RE).
 
 
 Notes:
