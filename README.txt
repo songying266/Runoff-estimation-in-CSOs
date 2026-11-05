@@ -1,8 +1,8 @@
-This package contains processed CML data for seven catchments and an example script to reproduce the results for sub-catchment A.
+This package contains an example script and instructions to reproduce the machine learning and SHAP analysis for sub-catchment A.
 
 Python script:
 
-run_catchment A.py demonstrates the full pipeline for sub-catchment A:
+run_catchment.py demonstrates the full pipeline for sub-catchments:
 
 1) load train/validation/test CSVs,
 
@@ -11,6 +11,7 @@ run_catchment A.py demonstrates the full pipeline for sub-catchment A:
 3) final training on train+val, evaluation on test,
 
 4) SHAP-based interpretability (global importance by CML groups; per-time-step within one group; intensity-stratified SHAP for small/moderate/heavy flows).
+
 
 Input data-each CSV file should include:
 
@@ -29,16 +30,9 @@ shap_groups.png – global importance of CML groups.
 
 shap_summary_groups.png – SHAP summary plot by CML groups.
 
-shap_timecurve_group1.png – SHAP importance curve over time steps (example for Group 1).
+shap_timecurve_{GroupName}.png – SHAP importance curve over time steps (dynamically named after the most important group identified in the global analysis, e.g., shap_timecurve_Group1.png).
 
 shap_by_rain_intensity.png – SHAP importance under small / moderate / heavy rainfall conditions.
 
-Console output: best hyperparameters from BayesSearchCV, and test set metrics (NSE, PCC, RMSE, RE).
 
-
-Notes:
-
-The example is provided only for catchment A.
-
-For other catchments, the code can be easily adapted by replacing the input CSVs and adjusting the number of groups/time steps if needed.
 
