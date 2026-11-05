@@ -138,7 +138,6 @@ def run_pipeline(catchment: str, base_dir: str = "."):
     if n_extra_features > 0:
         In[NUM_GROUPS:] = feature_importance[-n_extra_features:]
 
-    # 排序：索引从大到小（最重要 -> 最不重要）
     sorted_idx = np.argsort(In)[::-1]
     sorted_importance = In[sorted_idx]
     sorted_features = [feature_labels[i] for i in sorted_idx]
@@ -168,13 +167,11 @@ def run_pipeline(catchment: str, base_dir: str = "."):
     plt.close()
 
     # ---- Time-step importance within the MOST IMPORTANT group ----
-    # 获取最重要的 Group 索引（sorted_idx[0] 就是最重要的）
     most_important_group_idx = sorted_idx[0]
     most_important_group_label = feature_labels[most_important_group_idx]
 
     print(f"Analyzing temporal importance for the most important group: {most_important_group_label}")
 
-    # 动态提取最重要 Group 的 SHAP 值
     group_shap_values = shap_values.values[:, most_important_group_idx * n_lags : (most_important_group_idx + 1) * n_lags]
     time_shap_importance = np.abs(group_shap_values).mean(axis=0)
     time_labels = [f"T-{i}" for i in range(n_lags)]
@@ -185,10 +182,8 @@ def run_pipeline(catchment: str, base_dir: str = "."):
     plt.ylabel("Mean Absolute SHAP Value")
     plt.xticks(rotation=45)
     plt.grid(True)
-    # 标题动态显示是哪一个 Group
     plt.title(f"Temporal Importance ({most_important_group_label}, Catchment {catchment})")
     plt.tight_layout()
-    # 文件名动态保存
     plt.savefig(os.path.join(out_dir, f"shap_timecurve_{most_important_group_label.replace(' ', '')}.png"), dpi=300)
     plt.close()
 
