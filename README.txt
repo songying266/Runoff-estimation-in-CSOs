@@ -13,11 +13,11 @@ run_catchment.py demonstrates the full pipeline for sub-catchments:
 4) SHAP-based interpretability (global importance by CML groups; per-time-step within one group; intensity-stratified SHAP for small/moderate/heavy flows).
 
 
-Input data-each CSV files include:
+Each data CSV file include:
 
-Features: input variables (CML group time series, and additional features such as sin/cos of time).
+Features: input variables (CML group time series or RG series and additional features sin/cos of time).
 
-Target column: runoff/discharge values (the second-to-last column).
+Target column: discharge values (the second-to-last column).
 
 Event column: event identifiers (column name 'event').
 
