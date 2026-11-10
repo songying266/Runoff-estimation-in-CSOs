@@ -1,39 +1,25 @@
-This package contains an example script and instructions to reproduce the machine learning and SHAP analysis for sub-catchment A.
+# Basin Flow Prediction & Interpretability (XGBoost + SHAP)
+This package contains an example script and instructions to reproduce the machine learning and SHAP analysis. The pipeline uses predefined optimal hyperparameters to train the model and interpret it using SHAP.
 
-Python script:
+## Python script: `run_XGBoost_model.py`
+The script demonstrates the full pipeline for the sub-catchments (A-K):
+1) **Load data**: Read pre-split train/test CSVs.
+2) **Train & Evaluate**: Train the XGBoost model using optimal parameters and evaluate on the test set (R², PCC, RMSE, RE).
+3) **SHAP-based interpretability**: Generate global importance aggregated by CML groups, and a sample-level SHAP summary plot.
 
-run_catchment.py demonstrates the full pipeline for sub-catchments:
+## Input data
+The data is stored in the `data/` directory. Each CSV file should include:
+*   **Features**: Input variables (event-based CML group time series, event-based RG time seriesand additional features such as sin/cos of time).
+*   **Target column**: Runoff/discharge values (the second-to-last column).
+*   **Event column**: Event identifiers (column name `'event'`, the last column).
 
-1) load train/validation/test CSVs,
+## Output
+Results and plots are saved to `./outputs/`:
+*   `predictions_test.csv` – Observed vs. modelled runoff on the test set.
+*   `SHAP_{catchment}.tif` – Global feature importance based on aggregated SHAP values.
+*   `SHAPsample_{catchment}.tif` – Sample-level SHAP summary plot by CML groups.
 
-2) hyperparameter tuning with BayesSearchCV using a PredefinedSplit (train vs val),
-
-3) final training on train+val, evaluation on test,
-
-4) SHAP-based interpretability (global importance by CML groups; per-time-step within one group; intensity-stratified SHAP for small/moderate/heavy flows).
-
-
-Each data CSV file include:
-
-Features: input variables (CML group time series or RG series and additional features sin/cos of time).
-
-Target column: discharge values (the second-to-last column).
-
-Event column: event identifiers (column name 'event').
-
-Output:
-
-predictions_test.csv – observed vs. modelled runoff on the test set.
-
-shap_groups.png – global importance of CML groups.
-
-shap_summary_groups.png – SHAP summary plot by CML groups.
-
-shap_timecurve_{GroupName}.png – SHAP importance curve over time steps (dynamically named after the most important group identified in the global analysis, e.g., shap_timecurve_Group1.png).
-
-shap_by_rain_intensity.png – SHAP importance under small / moderate / heavy rainfall conditions.
-
-
-If you want to run the model using RG data instead, please simply open run_catchment.py, locate the data_dir variable definition (around Line 47), and change "CML_inputs" to "RGs_inputs".
-
-
+## Note on RG Data
+The provided data folders include both `Model_Data_CML_Q` and `Model_Data_RG_Q`. 
+*   The main script is specifically designed for **CML data** because the SHAP aggregation logic relies on the 5 CML groups.
+*   If you want to train the model using **RG data** instead of CML, simply open `run_XGBoost_model.py`, locate `data_base_dir` (around Line 28), and change `"Model_Data_CML_Q"` to `"Model_Data_RG_Q"`. *(Note: The SHAP plotting logic may need manual adjustment for RG feature structures).*
