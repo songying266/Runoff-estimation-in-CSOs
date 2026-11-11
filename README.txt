@@ -4,7 +4,7 @@ This package contains an example script and instructions to reproduce the machin
 ## Python script: `run_XGBoost_model.py`
 The script demonstrates the full pipeline for the sub-catchments (A-K):
 1) **Load data**: Read pre-split train/test CSVs.
-2) **Train & Evaluate**: Train the XGBoost model using optimal parameters and evaluate on the test set (R², PCC, RMSE, RE).
+2) **Train & Evaluate**: Train the XGBoost model using optimal parameters and evaluate on the test set.
 3) **SHAP-based interpretability**: Generate global importance aggregated by CML groups, and a sample-level SHAP summary plot.
 
 ## Input data
